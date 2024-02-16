@@ -5,6 +5,19 @@ from plotly.subplots import make_subplots
 import pandas as pd
 from streamlit_lightweight_charts import renderLightweightCharts
 
+st.set_page_config(initial_sidebar_state="collapsed", page_title="OnChain Data", layout="centered")
+
+st.markdown(
+    """
+<style>
+    [data-testid="collapsedControl"] {
+        display: none
+    }
+</style>
+""",
+    unsafe_allow_html=True,
+)
+
 LOGGER = get_logger(__name__)
 
 # Function to create the plot using Plotly
@@ -98,15 +111,29 @@ def run():
     } for index, row in df_resampled.iterrows()]
 
     # Define the chart options
-    chart_options = {
-        "layout": {
-            "textColor": 'black',
-            "background": {
-                "type": 'solid',
-                "color": 'white'
+    chart_options = [
+        {
+            "rightPriceScale": {
+                "mode": 1
+            },
+            "layout": {
+                "textColor": 'black',
+                "background": {
+                    "type": 'solid',
+                    "color": 'white'
+                }
+            }
+        },
+        {
+            "layout": {
+                "textColor": 'black',
+                "background": {
+                    "type": 'solid',
+                    "color": 'white'
+                }
             }
         }
-    }
+    ]
 
     # Define the series for the line chart
     seriesMVRV = [
@@ -134,11 +161,11 @@ def run():
     st.subheader(f"Normalized MVRV Score on: {timeframe} Timeframe")
     renderLightweightCharts([
         {
-            "chart": chart_options,
+            "chart": chart_options[0],
             "series": seriesPrice
         },
         {
-            "chart": chart_options,
+            "chart": chart_options[1],
             "series": seriesMVRV
         }
     ], 'multipane')
