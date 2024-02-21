@@ -4,8 +4,9 @@ import plotly.graph_objs as go
 from plotly.subplots import make_subplots
 import pandas as pd
 from streamlit_lightweight_charts import renderLightweightCharts
+from price_models import get_dataframe, create_cycle_bands_plot, create_norm_plot, create_transformed_cycle
 
-st.set_page_config(initial_sidebar_state="collapsed", page_title="OnChain Data", layout="centered")
+st.set_page_config(initial_sidebar_state="collapsed", page_title="OnChain Data", layout="wide")
 
 st.markdown(
     """
@@ -19,6 +20,7 @@ st.markdown(
 )
 
 LOGGER = get_logger(__name__)
+
 
 # Function to create the plot using Plotly
 def create_chart(combined_df):
@@ -51,7 +53,8 @@ def create_chart(combined_df):
     fig.update_yaxes(title_text='Young-NUPL (linear scale)', secondary_y=True, tickcolor='red')
 
     # Set the title
-    fig.update_layout(title='BTC Price and Young-NUPL Over Time')
+    fig.update_layout(title='BTC Price and Young-NUPL Over Time',
+                      height=600)
 
     return fig
 
@@ -88,27 +91,27 @@ def run():
 
     # Plot the chart using the function defined above
     fig = create_chart(combined_df)
-    st.plotly_chart(fig)
+    # st.plotly_chart(fig, use_container_width=True)
 
     # Select the timeframe with a radio button
-    timeframe = st.radio("Select Timeframe:", ('1D', '1W'))
+    # timeframe = st.radio("Select Timeframe:", ('1D', '1W'))
 
     # Resample the data based on the selected timeframe
-    df_resampled = resample_data(df, timeframe)
+    # df_resampled = resample_data(df, timeframe)
 
     # Convert 'Date' to the string format expected by Lightweight Charts
-    df_resampled['Date'] = df_resampled['Date'].dt.strftime('%Y-%m-%d')
+    # df_resampled['Date'] = df_resampled['Date'].dt.strftime('%Y-%m-%d')
 
     # Prepare the data for the chart
-    mrvr_series = [{
-        "time": row['Date'],
-        "value": row['Adjusted_MVRV']
-    } for index, row in df_resampled.iterrows()]
+    # mrvr_series = [{
+    #     "time": row['Date'],
+    #     "value": row['Adjusted_MVRV']
+    # } for index, row in df_resampled.iterrows()]
 
-    btc_price_series = [{
-        "time": row['Date'],
-        "value": row['BTC Price']
-    } for index, row in df_resampled.iterrows()]
+    # btc_price_series = [{
+    #     "time": row['Date'],
+    #     "value": row['BTC Price']
+    # } for index, row in df_resampled.iterrows()]
 
     # Define the chart options
     chart_options = [
@@ -136,39 +139,62 @@ def run():
     ]
 
     # Define the series for the line chart
-    seriesMVRV = [
-        {
-            "type": 'Line',
-            "data": mrvr_series,
-            "options": {
-                "color": 'blue',
-                "lineWidth": 2,
-            }
-        }
-    ]
-    seriesPrice = [
-        {
-            "type": 'Line',
-            "data": btc_price_series,
-            "options": {
-                "color": 'red',
-                "lineWidth": 2,
-            }
-        }
-    ]
+    # seriesMVRV = [
+    #     {
+    #         "type": 'Line',
+    #         "data": mrvr_series,
+    #         "options": {
+    #             "color": 'blue',
+    #             "lineWidth": 2,
+     #        }
+     #    }
+    # ]
+    # seriesPrice = [
+    #     {
+    #         "type": 'Line',
+     #        "data": btc_price_series,
+    #         "options": {
+    #             "color": 'red',
+    #             "lineWidth": 2,
+    #         }
+    #     }
+    # ]
 
     # Render the chart in Streamlit using the renderLightweightCharts function
-    st.subheader(f"Normalized MVRV Score on: {timeframe} Timeframe")
-    renderLightweightCharts([
-        {
-            "chart": chart_options[0],
-            "series": seriesPrice
-        },
-        {
-            "chart": chart_options[1],
-            "series": seriesMVRV
-        }
-    ], 'multipane')
+    # st.subheader(f"Normalized MVRV Score on: {timeframe} Timeframe")
+    
+    # renderLightweightCharts([
+    #    {
+    #        "chart": chart_options[0],
+    #        "series": seriesPrice
+    #    },
+    #    {
+    #        "chart": chart_options[1],
+    #        "series": seriesMVRV
+    #    }
+    #], 'multipane')
+
+    st.subheader(f"Cycle Bands Avg Peaks & Troughs")
+    df_cycles = get_dataframe()
+    # Call the function to create the plot
+    fig_cycles = create_cycle_bands_plot(df_cycles)
+
+    # Show the figure
+    st.plotly_chart(fig_cycles, use_container_width=True)
+
+    st.subheader(f"Normalized Cycle Bands")
+    # Call the function to create the plot
+    fig_norm_cycles = create_norm_plot(df_cycles)
+
+    # Show the figure
+    st.plotly_chart(fig_norm_cycles, use_container_width=True)
+
+    st.subheader(f"Normalized Transformed Cycle Bands")
+    # Call the function to create the plot
+    fig_transf_cycles = create_transformed_cycle(df_cycles)
+
+    # Show the figure
+    st.plotly_chart(fig_transf_cycles, use_container_width=True)
 
 
 if __name__ == "__main__":

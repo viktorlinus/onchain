@@ -5,3 +5,6 @@ pydeck
 streamlit
 plotly
 streamlit_lightweight_charts
+bs4
+requests
+lxml
