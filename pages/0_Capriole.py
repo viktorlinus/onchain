@@ -23,7 +23,7 @@ fig.add_trace(go.Scatter(x=df.index,
                          y=df['Speculation Index'], 
                          mode='lines', 
                          name='Speculation Index',
-                         hovertemplate='%{y:.2f}'))
+                         hovertemplate='%{x}<br>Speculation Index: %{y:.2f}<extra></extra>'))
 
 # Get the last date and the last value for the annotation
 last_date = df.index[-1]
