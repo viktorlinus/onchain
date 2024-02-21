@@ -6,18 +6,20 @@ import pandas as pd
 from streamlit_lightweight_charts import renderLightweightCharts
 from price_models import get_dataframe, create_cycle_bands_plot, create_norm_plot, create_transformed_cycle
 
-st.set_page_config(initial_sidebar_state="collapsed", page_title="OnChain Data", layout="wide")
+st.set_page_config(initial_sidebar_state="expanded", page_title="OnChain Data", layout="wide")
 
-st.markdown(
-    """
-<style>
-    [data-testid="collapsedControl"] {
-        display: none
-    }
-</style>
-""",
-    unsafe_allow_html=True,
-)
+
+#st.markdown(
+#    """
+#<style>
+#    [data-testid="collapsedControl"] {
+#        display: none
+#    }
+#</style>
+#""",
+#    unsafe_allow_html=True,
+#)
+
 
 LOGGER = get_logger(__name__)
 

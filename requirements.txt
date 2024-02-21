@@ -8,3 +8,4 @@ streamlit_lightweight_charts
 bs4
 requests
 lxml
+st-gsheets-connection
