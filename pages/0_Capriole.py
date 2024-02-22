@@ -59,3 +59,45 @@ fig.update_layout(
 
 # Show the figure
 st.plotly_chart(fig, use_container_width=True)
+
+conn = st.connection("gsheets", type=GSheetsConnection)
+
+df_breadth = conn.read(spreadsheet=url, worksheet='1183921616')
+
+# Convert 'date' column to datetime
+df_breadth['date'] = pd.to_datetime(df_breadth['date'])
+
+# Set the 'date' column as the index
+df_breadth.set_index('date', inplace=True)
+
+print(df_breadth.tail())
+
+# Create a Plotly figure
+fig_breadth = go.Figure()
+
+# Add the line plot
+fig_breadth.add_trace(go.Scatter(x=df_breadth.index, 
+                         y=df_breadth['breadth50'] * 100, 
+                         mode='lines', 
+                         name='Breadth 50',
+                         hovertemplate='%{x}<br>Breadth 50: %{y:.2f}%<extra></extra>'))
+
+fig_breadth.add_trace(go.Scatter(x=df_breadth.index, 
+                         y=df_breadth['breadth200'] * 100, 
+                         mode='lines', 
+                         name='Breadth 200',
+                         line=dict(color='red'),
+                         hovertemplate='%{x}<br>Breadth 200: %{y:.2f}%<extra></extra>'))
+
+# Set layout options
+fig_breadth.update_layout(
+    title='Crypto Breadth',
+    xaxis_title='Date',
+    yaxis_title='Breadth',
+    xaxis=dict(showline=True, showgrid=False),
+    yaxis=dict(showline=True, showgrid=True),
+    height=600
+)
+
+# Show the figure
+st.plotly_chart(fig_breadth, use_container_width=True)
