@@ -8,9 +8,9 @@ df2 = conn.read(worksheet="30D Change")
 
 st.header('Top 300 Tokens')
 st.subheader('Prices')
-st.dataframe(df)
+st.dataframe(df.dropna(subset=['Date']))
 st.subheader('30D Change')
-st.dataframe(df2)
+st.dataframe(df2.dropna(subset=['Date']))
 
 import pandas as pd
 
@@ -34,7 +34,7 @@ comparison_df.insert(0, 'Avg', first_col)
 st.subheader('30D Change > BTC?')
 
 # Now, comparison_df contains the comparison results and the average for each row
-st.dataframe(comparison_df)
+st.dataframe(comparison_df.dropna(subset=['Avg']))
 
 # Convert the index to datetime if it's not already (this step may not be necessary if it's already a datetime index)
 comparison_df.index = pd.to_datetime(comparison_df.index)
@@ -99,5 +99,5 @@ fig_avg.update_yaxes(range=[0, 100])
 st.plotly_chart(fig_avg, use_container_width=True)
 
 # Check the values before adding the annotation
-st.write("Last Date for Annotation:", comparison_df.index[-1].date())
-st.write("Last Value for Annotation:", (comparison_df['Avg'].iloc[-1] * 100))
+st.write("Last Date:", comparison_df.index[-1].date())
+st.write("Last Value:", round(comparison_df['Avg'].iloc[-1] * 100, 2))
