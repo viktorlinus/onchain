@@ -2,11 +2,9 @@ import streamlit as st
 from streamlit_gsheets import GSheetsConnection
 import plotly.graph_objs as go
 
-url = 'https://docs.google.com/spreadsheets/d/1kjrs0PzLmshlIiJ9qTBAmxsSGFt8QLutl0CAlEPRD5U/edit?usp=sharing'
-
 conn = st.connection("gsheets", type=GSheetsConnection)
-df = conn.read(spreadsheet=url, worksheet="Price")
-df2 = conn.read(spreadsheet=url, worksheet="30D Change")
+df = conn.read(worksheet="Price")
+df2 = conn.read(worksheet="30D Change")
 
 st.header('Top 300 Tokens')
 st.subheader('Prices')
@@ -101,5 +99,5 @@ fig_avg.update_yaxes(range=[0, 100])
 st.plotly_chart(fig_avg, use_container_width=True)
 
 # Check the values before adding the annotation
-st.write("Last Date for Annotation:", comparison_df.index[-1])
-st.write("Last Value for Annotation:", comparison_df['Avg'].iloc[-1] * 100)
+st.write("Last Date for Annotation:", comparison_df.index[-1].date())
+st.write("Last Value for Annotation:", (comparison_df['Avg'].iloc[-1] * 100))
