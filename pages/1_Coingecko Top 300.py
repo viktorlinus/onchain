@@ -2,9 +2,11 @@ import streamlit as st
 from streamlit_gsheets import GSheetsConnection
 import plotly.graph_objs as go
 
+url = 'https://docs.google.com/spreadsheets/d/1kjrs0PzLmshlIiJ9qTBAmxsSGFt8QLutl0CAlEPRD5U/edit?usp=sharing'
+
 conn = st.connection("gsheets", type=GSheetsConnection)
-df = conn.read(worksheet="Price")
-df2 = conn.read(worksheet="30D Change")
+df = conn.read(spreadsheet=url, worksheet="Price")
+df2 = conn.read(spreadsheet=url, worksheet="30D Change")
 
 st.header('Top 300 Tokens')
 st.subheader('Prices')
