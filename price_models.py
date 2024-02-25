@@ -97,6 +97,83 @@ df['Oversold'] = np.log(0.25 * df['Row Number'] + 11000) - 9.4
 # Calculate the Adjusted Normalized Price to fluctuate between the overbought and oversold curves
 df['Adjusted Normalized Price'] = (df['Normalized Price'] - df['Oversold']) / (df['Overbought'] - df['Oversold'])
 
+def create_all_cycle_bands(df):
+    df = df[df.index >= pd.to_datetime('2012')]
+    # Assuming 'final_df' is your DataFrame and it has a 'Date' index in datetime format
+    # and columns named 'True Market Mean' and 'BTC Price'
+
+    # Plot the 'BTC Price' on a logarithmic scale and the standard deviation bands using Plotly
+    fig = go.Figure()
+
+    # Create a subplot with 2 y-axes
+    fig = make_subplots(specs=[[{"secondary_y": True}]])
+
+    # Add 'BTC Price' trace with a logarithmic scale
+    fig.add_trace(
+        go.Scatter(x=df.index, y=df['BTC Price'], name='BTC Price (log scale)', line=dict(color='blue')),
+        secondary_y=False,
+    )
+
+    # Add
+    fig.add_trace(
+        go.Scatter(x=df.index, y=df['Terminal Price'], name='Terminal Price', mode='lines', line=dict(color='red')),
+        secondary_y=False,
+    )
+    # Add
+    fig.add_trace(
+        go.Scatter(x=df.index, y=df['Terminal Price AVIV'], name='Terminal Price AVIV', mode='lines', line=dict(color='black')),
+        secondary_y=False,
+    )
+    # Add
+    fig.add_trace(
+        go.Scatter(x=df.index, y=df['Balanced Price'], name='Balanced Price', mode='lines', line=dict(color='green')),
+        secondary_y=False,
+    )
+    # Add
+    fig.add_trace(
+        go.Scatter(x=df.index, y=df['Realized Price'], name='Realized Price', mode='lines', line=dict(color='indigo')),
+        secondary_y=False,
+    )
+    # Add
+    fig.add_trace(
+        go.Scatter(x=df.index, y=df['Delta Top'], name='Delta Top', mode='lines', line=dict(color='purple')),
+        secondary_y=False,
+    )
+    # Add
+    fig.add_trace(
+        go.Scatter(x=df.index, y=df['Vaulted Price'], name='Vaulted Price', mode='lines', line=dict(color='violet')),
+        secondary_y=False,
+    )
+    # Add
+    fig.add_trace(
+        go.Scatter(x=df.index, y=df['Vaulted Top'], name='Vaulted Top', mode='lines', line=dict(color='red')),
+        secondary_y=False,
+    )
+    # Add
+    fig.add_trace(
+        go.Scatter(x=df.index, y=df['Cointime Price'], name='Cointime Price', mode='lines', line=dict(color='orange')),
+        secondary_y=False,
+    )
+
+    # Set x-axis title
+    fig.update_xaxes(title_text='Date')
+
+    # Set y-axes titles
+    fig.update_yaxes(title_text='BTC Price (log scale)', secondary_y=False, type='log', tickcolor='blue')
+    # fig.update_yaxes(title_text='HODL Waves (BTC)', secondary_y=True, tickcolor='red')
+
+    # Set the title
+    fig.update_layout(height = 600,
+                      legend=dict(
+                        orientation='h',  # Horizontal layout
+                        yanchor='bottom', # Anchor legend at the bottom
+                        y=1.02,           # Position legend slightly above the plot
+                        xanchor='center', # Anchor legend in the center
+                        x=0.5             # Center the legend horizontally
+    ))
+
+    return fig
+
 def get_dataframe():
     return df
 

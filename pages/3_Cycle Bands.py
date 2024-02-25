@@ -1,9 +1,15 @@
 import streamlit as st
-from price_models import get_dataframe, create_cycle_bands_plot, create_norm_plot, create_transformed_cycle
+from price_models import get_dataframe, create_cycle_bands_plot, create_norm_plot, create_transformed_cycle, create_all_cycle_bands
 
+df_cycles = get_dataframe()
+
+st.subheader("All Cycle Band Metrics")
+fig_all = create_all_cycle_bands(df_cycles)
+
+st.plotly_chart(fig_all, use_container_width=True)
 
 st.subheader(f"Cycle Bands Avg Peaks & Troughs")
-df_cycles = get_dataframe()
+
 # Call the function to create the plot
 fig_cycles = create_cycle_bands_plot(df_cycles)
 
