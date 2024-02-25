@@ -9,18 +9,6 @@ from price_models import get_dataframe, create_cycle_bands_plot, create_norm_plo
 st.set_page_config(initial_sidebar_state="expanded", page_title="OnChain Data", layout="wide")
 
 
-#st.markdown(
-#    """
-#<style>
-#    [data-testid="collapsedControl"] {
-#        display: none
-#    }
-#</style>
-#""",
-#    unsafe_allow_html=True,
-#)
-
-
 LOGGER = get_logger(__name__)
 
 
@@ -60,13 +48,6 @@ def create_chart(combined_df):
 
     return fig
 
-# Function to resample the DataFrame based on the selected timeframe
-def resample_data(dataframe, timeframe):
-    if timeframe == '1W':
-        # Resample to weekly data, taking the mean of 'Adjusted_MVRV' for the week
-        dataframe = dataframe.resample('W', on='Date').mean().reset_index()
-    return dataframe
-
 # Assuming the CSV file has columns 'Date', 'BTC Price', and 'Young-NUPL'
 # and that 'Date' is in a format that pandas can parse as a datetime object
 csv_file_path = 'nupl.csv'  # Replace with the path to your CSV file
@@ -90,91 +71,6 @@ df['Adjusted_MVRV'] = df['Adjusted_MVRV'].fillna(0)  # or df['Adjusted_MVRV'].fi
 def run():
 
     st.title("On-Chain Data")
-
-    # Plot the chart using the function defined above
-    fig = create_chart(combined_df)
-    # st.plotly_chart(fig, use_container_width=True)
-
-    # Select the timeframe with a radio button
-    # timeframe = st.radio("Select Timeframe:", ('1D', '1W'))
-
-    # Resample the data based on the selected timeframe
-    # df_resampled = resample_data(df, timeframe)
-
-    # Convert 'Date' to the string format expected by Lightweight Charts
-    # df_resampled['Date'] = df_resampled['Date'].dt.strftime('%Y-%m-%d')
-
-    # Prepare the data for the chart
-    # mrvr_series = [{
-    #     "time": row['Date'],
-    #     "value": row['Adjusted_MVRV']
-    # } for index, row in df_resampled.iterrows()]
-
-    # btc_price_series = [{
-    #     "time": row['Date'],
-    #     "value": row['BTC Price']
-    # } for index, row in df_resampled.iterrows()]
-
-    # Define the chart options
-    chart_options = [
-        {
-            "rightPriceScale": {
-                "mode": 1
-            },
-            "layout": {
-                "textColor": 'black',
-                "background": {
-                    "type": 'solid',
-                    "color": 'white'
-                }
-            }
-        },
-        {
-            "layout": {
-                "textColor": 'black',
-                "background": {
-                    "type": 'solid',
-                    "color": 'white'
-                }
-            }
-        }
-    ]
-
-    # Define the series for the line chart
-    # seriesMVRV = [
-    #     {
-    #         "type": 'Line',
-    #         "data": mrvr_series,
-    #         "options": {
-    #             "color": 'blue',
-    #             "lineWidth": 2,
-     #        }
-     #    }
-    # ]
-    # seriesPrice = [
-    #     {
-    #         "type": 'Line',
-     #        "data": btc_price_series,
-    #         "options": {
-    #             "color": 'red',
-    #             "lineWidth": 2,
-    #         }
-    #     }
-    # ]
-
-    # Render the chart in Streamlit using the renderLightweightCharts function
-    # st.subheader(f"Normalized MVRV Score on: {timeframe} Timeframe")
-    
-    # renderLightweightCharts([
-    #    {
-    #        "chart": chart_options[0],
-    #        "series": seriesPrice
-    #    },
-    #    {
-    #        "chart": chart_options[1],
-    #        "series": seriesMVRV
-    #    }
-    #], 'multipane')
 
     st.subheader(f"Cycle Bands Avg Peaks & Troughs")
     df_cycles = get_dataframe()

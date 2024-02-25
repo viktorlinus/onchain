@@ -5,9 +5,9 @@ import plotly.graph_objs as go
 
 url = "https://docs.google.com/spreadsheets/d/1aUBtfcosN0-KzZrLQhwVYyRWsomGpNmef1ZY7ZySI8w/edit?usp=sharing"
 
-conn = st.connection("gsheets", type=GSheetsConnection)
+conn_cap = st.connection("gsheets", type=GSheetsConnection)
 
-df = conn.read(spreadsheet=url, usecols=[0, 2], worksheet='1232942109')
+df = conn_cap.read(spreadsheet=url, usecols=[0, 2], worksheet='speculation_index')
 
 # Convert 'date' column to datetime
 df['date'] = pd.to_datetime(df['date'])
@@ -60,17 +60,15 @@ fig.update_layout(
 # Show the figure
 st.plotly_chart(fig, use_container_width=True)
 
-conn = st.connection("gsheets", type=GSheetsConnection)
+conn_cap2 = st.connection("gsheets", type=GSheetsConnection)
 
-df_breadth = conn.read(spreadsheet=url, worksheet='1183921616')
+df_breadth = conn_cap2.read(spreadsheet=url, worksheet='breadth_crypto')
 
 # Convert 'date' column to datetime
 df_breadth['date'] = pd.to_datetime(df_breadth['date'])
 
 # Set the 'date' column as the index
 df_breadth.set_index('date', inplace=True)
-
-print(df_breadth.tail())
 
 # Create a Plotly figure
 fig_breadth = go.Figure()
