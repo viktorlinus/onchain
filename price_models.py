@@ -136,7 +136,14 @@ def create_cycle_bands_plot(df):
     fig.update_yaxes(title_text='BTC Price (log scale)', secondary_y=False, type='log', tickcolor='blue')
 
     # Set the title
-    fig.update_layout(height=600)
+    fig.update_layout(height=600,
+                      legend=dict(
+                        orientation='h',  # Horizontal layout
+                        yanchor='bottom', # Anchor legend at the bottom
+                        y=1.02,           # Position legend slightly above the plot
+                        xanchor='center', # Anchor legend in the center
+                        x=0.5             # Center the legend horizontally
+    ))
 
     return fig
 
@@ -176,7 +183,14 @@ def create_norm_plot(df):
     #fig.update_yaxes(title_text='HODL Waves (BTC)', secondary_y=True, tickcolor='red')
 
     # Set the title
-    fig.update_layout(height=600)
+    fig.update_layout(height=600,
+                      legend=dict(
+                        orientation='h',  # Horizontal layout
+                        yanchor='bottom', # Anchor legend at the bottom
+                        y=1.02,           # Position legend slightly above the plot
+                        xanchor='center', # Anchor legend in the center
+                        x=0.5             # Center the legend horizontally
+    ))
 
     return fig
 
@@ -206,6 +220,13 @@ def create_transformed_cycle(df):
     #fig.update_yaxes(title_text='HODL Waves (BTC)', secondary_y=True, tickcolor='red')
 
     # Set the title
-    fig.update_layout(height=600)
+    fig.update_layout(height=600,
+                      legend=dict(
+                        orientation='h',  # Horizontal layout
+                        yanchor='bottom', # Anchor legend at the bottom
+                        y=1.02,           # Position legend slightly above the plot
+                        xanchor='center', # Anchor legend in the center
+                        x=0.5             # Center the legend horizontally
+    ))
 
     return fig
