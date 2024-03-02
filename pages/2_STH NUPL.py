@@ -116,7 +116,7 @@ def create_chart_nupl(combined_df):
 
     # Set y-axes titles
     fig.update_yaxes(title_text='BTC Price (log scale)', secondary_y=False, type='log', tickcolor='blue')
-    fig.update_yaxes(title_text='Young-NUPL (linear scale)', secondary_y=True, tickcolor='red')
+    fig.update_yaxes(title_text='STH-NUPL (linear scale)', secondary_y=True, tickcolor='red')
 
     fig.update_layout(height=600,
                       legend=dict(
