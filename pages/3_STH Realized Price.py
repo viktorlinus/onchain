@@ -93,11 +93,11 @@ fig.add_trace(
 
 # Add 'HODL Waves' trace on second y-axis
 fig.add_trace(
-    go.Scatter(x=df.index, y=df['STH Cost Basis'], name='STH Cost Basis', mode='lines', line=dict(color='brown')),
+    go.Scatter(x=df.index, y=df['STH Cost Basis'], name='STH Realized Price', mode='lines', line=dict(color='brown')),
     secondary_y=False,
 )
 fig.add_trace(
-    go.Scatter(x=df.index, y=df['STH MVRV'], name='STH MVRV', mode='lines', line=dict(color='purple')),
+    go.Scatter(x=df.index, y=df['STH MVRV'], name='STH PnL', mode='lines', line=dict(color='purple')),
     secondary_y=True,
 )
 
@@ -108,8 +108,8 @@ fig.add_hline(y=1, line=dict(color='black', dash='dash'), secondary_y=True)
 fig.update_xaxes(title_text='Date')
 
 # Set y-axes titles
-fig.update_yaxes(title_text='BTC Price & STH Cost Basis', secondary_y=False, type='log', tickcolor='blue')
-fig.update_yaxes(title_text='STH MVRV', secondary_y=True, tickcolor='red')
+fig.update_yaxes(title_text='BTC Price & STH Realized Price', secondary_y=False, type='log', tickcolor='blue')
+fig.update_yaxes(title_text='STH PnL', secondary_y=True, tickcolor='red')
 
 fig.update_layout(height=600,
                     legend=dict(
@@ -120,11 +120,11 @@ fig.update_layout(height=600,
                     x=0.5             # Center the legend horizontally
 ))
 
-def create_sth_mvrv_plot():
+def create_sth_pnl_plot():
     return fig
     
-fig = create_sth_mvrv_plot()
+fig = create_sth_pnl_plot()
 
-st.subheader('BTC Price and STH-MVRV')
+st.subheader('STH Realized Price & PnL')
 
 st.plotly_chart(fig, use_container_width=True)

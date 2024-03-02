@@ -104,7 +104,7 @@ def create_chart_nupl(combined_df):
 
     # Add 'Young-NUPL' trace
     fig.add_trace(
-        go.Scatter(x=combined_df_filtered.index, y=combined_df_filtered['Young-NUPL'], name='Young-NUPL', mode='lines', line=dict(color='red')),
+        go.Scatter(x=combined_df_filtered.index, y=combined_df_filtered['Young-NUPL'], name='STH NUPL', mode='lines', line=dict(color='red')),
         secondary_y=True,
     )
 
@@ -131,6 +131,6 @@ def create_chart_nupl(combined_df):
 
 fig = create_chart_nupl(combined_df)
 
-st.subheader('BTC Price and STH-NUPL Over Time')
+st.subheader('STH NUPL')
 
 st.plotly_chart(fig, use_container_width=True)
