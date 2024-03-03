@@ -5,6 +5,7 @@ import pandas as pd
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
 import streamlit as st
+from aviv_nupl import aviv_nupl_df
 
 # Fetch the webpage
 url = "https://checkonchain.com/btconchain/cointime/cointime_pricing_mvrv_aviv_1/cointime_pricing_mvrv_aviv_1_light.html"
@@ -128,7 +129,7 @@ fig.update_xaxes(title_text='Date')
 
 # Set y-axes titles
 fig.update_yaxes(title_text='BTC Price (log scale)', secondary_y=False, type='log', tickcolor='blue')
-fig.update_yaxes(title_text='True Market Mean & AVIV', secondary_y=True, tickcolor='red')
+fig.update_yaxes(title_text='True Market Mean & AVIV Ratio', secondary_y=True, tickcolor='red')
 
 fig.update_layout(height=600,
                     legend=dict(
@@ -145,6 +146,86 @@ def create_chart_aviv():
 
 fig = create_chart_aviv()
 
-st.subheader('True Market Mean & AVIV')
+st.subheader('True Market Mean & AVIV Ratio')
 
 st.plotly_chart(fig, use_container_width=True)
+
+aviv_nupl = aviv_nupl_df()
+
+expanding_mean_nupl_before = aviv_nupl['AVIV NUPL'].expanding().mean()
+expanding_std_nupl_before = aviv_nupl['AVIV NUPL'].expanding().std()
+
+aviv_nupl['Mean - 2σ'] = expanding_mean_nupl_before + (expanding_std_nupl_before * -2)
+aviv_nupl['Mean + 1.25σ'] = expanding_mean_nupl_before + (expanding_std_nupl_before * 1.25)
+
+
+# Filter the DataFrame to only include data from 2012 onwards
+combined_df_filtered_nupl = aviv_nupl[combined_df.index.year >= 2012]
+
+# Calculate the expanding mean and standard deviation
+expanding_mean_nupl = combined_df_filtered_nupl['AVIV NUPL'].expanding().mean()
+expanding_std_nupl = combined_df_filtered_nupl['AVIV NUPL'].expanding().std()
+
+# Calculate 'Mean + 3σ' using the expanding mean and standard deviation
+combined_df_filtered_nupl['Mean + 1.5σ'] = expanding_mean_nupl + (expanding_std_nupl * 1.5)
+combined_df_filtered_nupl['Mean + 2σ'] = expanding_mean_nupl + (expanding_std_nupl * 2)
+
+
+# Create a subplot with 2 y-axes
+fig1 = make_subplots(specs=[[{"secondary_y": True}]])
+
+# Add 'BTC Price' trace with a logarithmic scale
+fig1.add_trace(
+    go.Scatter(x=combined_df_filtered_nupl.index, y=combined_df_filtered_nupl['BTC Price'], name='BTC Price', mode='lines', line=dict(color='black')),
+    secondary_y=False,
+)
+
+fig1.add_trace(
+    go.Scatter(x=combined_df_filtered_nupl.index, y=combined_df_filtered_nupl['True Market Mean'], name='True Market Mean', mode='lines', line=dict(color='blue')),
+    secondary_y=False,
+)
+
+fig1.add_trace(
+    go.Scatter(x=combined_df_filtered_nupl.index, y=combined_df_filtered_nupl['AVIV NUPL'], name='AVIV NUPL', mode='lines', line=dict(color='purple')),
+    secondary_y=True,
+)
+
+#fig1.add_trace(
+#    go.Scatter(x=combined_df_filtered_nupl.index, y=combined_df_filtered_nupl['Mean + 2σ'], name='Mean + 2σ', mode='lines', line=dict(color='red')),
+#    secondary_y=True,
+#)
+#fig1.add_trace(
+#    go.Scatter(x=combined_df_filtered_nupl.index, y=combined_df_filtered_nupl['Mean + 1.5σ'], name='Mean + 1.5σ', mode='lines', line=dict(color='orange')),
+#    secondary_y=True,
+#)
+fig1.add_trace(
+    go.Scatter(x=combined_df_filtered_nupl.index, y=combined_df_filtered_nupl['Mean - 2σ'], name='Mean - 2σ', mode='lines', line=dict(color='green')),
+    secondary_y=True,
+)
+fig1.add_trace(
+    go.Scatter(x=combined_df_filtered_nupl.index, y=combined_df_filtered_nupl['Mean + 1.25σ'], name='Mean + 1.25σ', mode='lines', line=dict(color='red')),
+    secondary_y=True,
+)
+
+# Add a horizontal line at 0 on the secondary y-axis
+fig1.add_hline(y=0, line=dict(color='gray', dash='dash'), secondary_y=True)
+
+# Set x-axis title
+fig1.update_xaxes(title_text='Date')
+
+# Set y-axes titles
+fig1.update_yaxes(title_text='BTC Price (log scale)', secondary_y=False, type='log', tickcolor='blue')
+fig1.update_yaxes(title_text='True Market Mean & AVIV NUPL', secondary_y=True, tickcolor='red')
+
+fig1.update_layout(height=600,
+                    legend=dict(
+                    orientation='h',  # Horizontal layout
+                    yanchor='bottom', # Anchor legend at the bottom
+                    y=1.02,           # Position legend slightly above the plot
+                    xanchor='center', # Anchor legend in the center
+                    x=0.5             # Center the legend horizontally
+))
+
+st.subheader('True Market Mean & AVIV NUPL')
+
+st.plotly_chart(fig1, use_container_width=True)
