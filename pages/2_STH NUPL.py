@@ -85,13 +85,24 @@ combined_df['Euphoria (2-of-3)'] = dataframes['Euphoria (2-of-3)']['Value']
 combined_df['Euphoria (3-of-3)'] = dataframes['Euphoria (3-of-3)']['Value']
 combined_df['Max Pain'] = dataframes['Max Pain']['Value']
 
+
+
 def get_dataframe_nupl():
-    return df
+    return combined_df
 
 # Function to create the plot using Plotly
 def create_chart_nupl(combined_df):
     # Filter the DataFrame to only include data from 2012 onwards
     combined_df_filtered = combined_df[combined_df.index.year >= 2012]
+
+    # Calculate the expanding mean and standard deviation
+    expanding_mean = combined_df_filtered['Young-NUPL'].expanding().mean()
+    expanding_std = combined_df_filtered['Young-NUPL'].expanding().std()
+
+    # Calculate 'Mean' using the expanding mean and standard deviation
+    combined_df_filtered['Mean + 2σ'] = expanding_mean + (expanding_std * 2)
+    combined_df_filtered['Mean + 1.5σ'] = expanding_mean + (expanding_std * 1.5)
+
 
     # Create a subplot with 2 y-axes
     fig = make_subplots(specs=[[{"secondary_y": True}]])
@@ -104,7 +115,16 @@ def create_chart_nupl(combined_df):
 
     # Add 'Young-NUPL' trace
     fig.add_trace(
-        go.Scatter(x=combined_df_filtered.index, y=combined_df_filtered['Young-NUPL'], name='STH NUPL', mode='lines', line=dict(color='red')),
+        go.Scatter(x=combined_df_filtered.index, y=combined_df_filtered['Young-NUPL'], name='STH NUPL', mode='lines', line=dict(color='purple')),
+        secondary_y=True,
+    )
+    # Add 'Young-NUPL' trace
+    fig.add_trace(
+        go.Scatter(x=combined_df_filtered.index, y=combined_df_filtered['Mean + 2σ'], name='Mean + 2σ', mode='lines', line=dict(color='red')),
+        secondary_y=True,
+    )
+    fig.add_trace(
+        go.Scatter(x=combined_df_filtered.index, y=combined_df_filtered['Mean + 1.5σ'], name='Mean + 1.5σ', mode='lines', line=dict(color='orange')),
         secondary_y=True,
     )
 

@@ -65,7 +65,7 @@ final_df = final_df.dropna(axis = 1)
 final_df.index = pd.to_datetime(final_df.index)
 
 # Now 'final_df' is a DataFrame with each 'y' in its own column, named after the 'name' value
-print(final_df.info())
+
 
 final_df['STH Cost Basis'] = final_df['1m to 3m'].astype(float)
 final_df['STH MVRV'] = final_df['Price'].astype(float) / final_df['1m to 3m'].astype(float)
