@@ -9,7 +9,7 @@ import streamlit as st
 
 
 # Fetch the webpage
-url = "https://checkonchain.com/btconchain/pricing/pricing_mvrv/pricing_mvrv_light.html"
+url = "https://charts.checkonchain.com/btconchain/pricing/pricing_mvrv/pricing_mvrv_light.html"
 raw = requests.get(url)
 soup = bs(raw.text, "lxml")
 

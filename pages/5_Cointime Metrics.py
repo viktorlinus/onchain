@@ -8,7 +8,7 @@ import streamlit as st
 from aviv_nupl import aviv_nupl_df
 
 # Fetch the webpage
-url = "https://checkonchain.com/btconchain/cointime/cointime_pricing_mvrv_aviv_1/cointime_pricing_mvrv_aviv_1_light.html"
+url = "https://charts.checkonchain.com/btconchain/pricing/cointime_mvrv_aviv_1/cointime_mvrv_aviv_1_light.html"
 raw = requests.get(url)
 soup = bs(raw.text, "lxml")
 
@@ -70,8 +70,8 @@ combined_df = pd.DataFrame(index=dataframes['Price'].index)
 combined_df['BTC Price'] = dataframes['Price']['Value']
 combined_df['True Market Mean'] = dataframes['True Market Mean']['Value']
 combined_df['AVIV Ratio'] = dataframes['AVIV Ratio']['Value']
-combined_df['Mean + 2σ'] = dataframes['Mean + 2σ']['Value']
-combined_df['Mean - 1σ'] = dataframes['Mean - 1σ']['Value']
+#combined_df['Mean + 2σ'] = dataframes['Mean + 2σ']['Value']
+#combined_df['Mean - 1σ'] = dataframes['Mean - 1σ']['Value']
 
 
 # Calculate the expanding mean and standard deviation
@@ -107,19 +107,19 @@ fig.add_trace(
     secondary_y=True,
 )
 
-fig.add_trace(
-    go.Scatter(x=combined_df_filtered.index, y=combined_df_filtered['Mean + 2σ'], name='Mean + 2σ', mode='lines', line=dict(color='orange')),
-    secondary_y=True,
-)
+#fig.add_trace(
+#    go.Scatter(x=combined_df_filtered.index, y=combined_df_filtered['Mean + 2σ'], name='Mean + 2σ', mode='lines', line=dict(color='orange')),
+#    secondary_y=True,
+#)
 fig.add_trace(
     go.Scatter(x=combined_df_filtered.index, y=combined_df_filtered['Mean + 3σ'], name='Mean + 3σ', mode='lines', line=dict(color='red')),
     secondary_y=True,
 )
 
-fig.add_trace(
-    go.Scatter(x=combined_df_filtered.index, y=combined_df_filtered['Mean - 1σ'], name='Mean - 1σ', mode='lines', line=dict(color='green')),
-    secondary_y=True,
-)
+#fig.add_trace(
+#    go.Scatter(x=combined_df_filtered.index, y=combined_df_filtered['Mean - 1σ'], name='Mean - 1σ', mode='lines', line=dict(color='green')),
+#    secondary_y=True,
+#)
 
 # Add a horizontal line at 0 on the secondary y-axis
 fig.add_hline(y=0, line=dict(color='gray', dash='dash'), secondary_y=True)
@@ -159,8 +159,11 @@ aviv_nupl['Mean - 2σ'] = expanding_mean_nupl_before + (expanding_std_nupl_befor
 aviv_nupl['Mean + 1.25σ'] = expanding_mean_nupl_before + (expanding_std_nupl_before * 1.25)
 
 
+if not isinstance(aviv_nupl.index, pd.DatetimeIndex):
+    aviv_nupl.index = pd.to_datetime(aviv_nupl.index)
+
 # Filter the DataFrame to only include data from 2012 onwards
-combined_df_filtered_nupl = aviv_nupl[combined_df.index.year >= 2012]
+combined_df_filtered_nupl = aviv_nupl[aviv_nupl.index.year >= 2012]
 
 # Calculate the expanding mean and standard deviation
 expanding_mean_nupl = combined_df_filtered_nupl['AVIV NUPL'].expanding().mean()

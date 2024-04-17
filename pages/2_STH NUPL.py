@@ -7,7 +7,7 @@ from plotly.subplots import make_subplots
 import streamlit as st
 
 # Fetch the webpage
-url = "https://checkonchain.com/btconchain/pricing/pricing_nupl_lthsth_est/pricing_nupl_lthsth_est_light.html"
+url = "https://charts.checkonchain.com/btconchain/pricing/pricing_nupl_lthsth_est/pricing_nupl_lthsth_est_light.html"
 raw = requests.get(url)
 soup = bs(raw.text, "lxml")
 

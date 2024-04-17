@@ -4,7 +4,7 @@ import requests
 import pandas as pd
 
 # Fetch the webpage
-url = "https://checkonchain.com/btconchain/cointime/cointime_pricing_mvrv_nupl/cointime_pricing_mvrv_nupl_light.html"
+url = "https://charts.checkonchain.com/btconchain/cointime/cointime_pricing_mvrv_nupl/cointime_pricing_mvrv_nupl_light.html"
 raw = requests.get(url)
 soup = bs(raw.text, "lxml")
 
