@@ -79,8 +79,8 @@ combined_df = pd.DataFrame(index=dataframes['Price'].index)
 # Add the 'Y' data from each trace as a separate column in the combined DataFrame
 combined_df['BTC Price'] = dataframes['Price']['Value']
 combined_df['NUPL'] = dataframes['NUPL']['Value']
-combined_df['Young-NUPL'] = dataframes['Young-NUPL']['Value']
-combined_df['Old-NUPL'] = dataframes['Old-NUPL']['Value']
+combined_df['Young-NUPL'] = dataframes['STH-NUPL']['Value']
+combined_df['Old-NUPL'] = dataframes['LTH-NUPL']['Value']
 combined_df['Euphoria (2-of-3)'] = dataframes['Euphoria (2-of-3)']['Value']
 combined_df['Euphoria (3-of-3)'] = dataframes['Euphoria (3-of-3)']['Value']
 combined_df['Max Pain'] = dataframes['Max Pain']['Value']
